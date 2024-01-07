@@ -45,6 +45,7 @@ const AutoPlayButton: React.FC<AutoPlayButtonProps> = ({
 	return (
 		<Button
 			className="mx-auto my-2"
+			disabled={gameResult.current !== null}
 			onClick={() => setIsAutoPlaying(!isAutoPlaying)}>
 			{isAutoPlaying ? "Stop Auto-Play" : "Start Auto-Play"}
 		</Button>

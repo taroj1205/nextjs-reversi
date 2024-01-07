@@ -1,14 +1,24 @@
 "use client";
 import { Board } from "@/components/Board";
-import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
+import {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { Settings } from "./Settings";
 import {
 	Center,
 	HStack,
 	Heading,
 	IconButton,
+	Progress,
+	Stat,
 	Text,
 	VStack,
+	useDisclosure,
 } from "@yamada-ui/react";
 import { FaRedo } from "react-icons/fa";
 
@@ -30,6 +40,15 @@ export interface BoardProps {
 	lastMove: number[];
 	setLastMove: Dispatch<SetStateAction<number[]>>;
 	resetGame: () => void;
+	isOpen: boolean;
+	onClose: () => void;
+	onOpen: () => void;
+	setPrevBlackCount: Dispatch<SetStateAction<number>>;
+	setPrevWhiteCount: Dispatch<SetStateAction<number>>;
+	setPrevBlackDifference: Dispatch<SetStateAction<number>>;
+	setPrevWhiteDifference: Dispatch<SetStateAction<number>>;
+	prevBlackCount: number;
+	prevWhiteCount: number;
 }
 
 export const boardSize = 8; // Standard Reversi board size
@@ -68,8 +87,10 @@ export const Game = () => {
 	const [autoPlayTimeout, setAutoPlayTimeout] = useState<number>(500);
 	const [lastFlippedPieces, setLastFlippedPieces] = useState<number[][]>([]);
 	const [lastMove, setLastMove] = useState<number[]>([]);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const resetGame = () => {
+		onClose();
 		setBoard(initializeBoard());
 		gameResult.current = null;
 		currentPlayerRef.current = 1;
@@ -91,6 +112,21 @@ export const Game = () => {
 
 		return { whiteCount, blackCount };
 	}, [board]);
+
+	// Calculate the percentage of white pieces
+	const totalPieces = countPieces().whiteCount + countPieces().blackCount;
+	const whitePercentage =
+		totalPieces > 0 ? (countPieces().whiteCount / totalPieces) * 100 : 0;
+
+	const [prevBlackCount, setPrevBlackCount] = useState(0);
+	const [prevBlackDifference, setPrevBlackDifference] = useState(0);
+	const [prevWhiteCount, setPrevWhiteCount] = useState(0);
+	const [prevWhiteDifference, setPrevWhiteDifference] = useState(0);
+
+	const { blackCount, whiteCount } = countPieces();
+
+	const blackDifference = blackCount - prevBlackCount;
+	const whiteDifference = whiteCount - prevWhiteCount;
 
 	return (
 		<Center>
@@ -117,6 +153,15 @@ export const Game = () => {
 						lastMove={lastMove}
 						setLastMove={setLastMove}
 						resetGame={resetGame}
+						isOpen={isOpen}
+						onClose={onClose}
+						onOpen={onOpen}
+						setPrevBlackCount={setPrevBlackCount}
+						setPrevWhiteCount={setPrevWhiteCount}
+						setPrevBlackDifference={setPrevBlackDifference}
+						setPrevWhiteDifference={setPrevWhiteDifference}
+						prevBlackCount={prevBlackCount}
+						prevWhiteCount={prevWhiteCount}
 					/>
 					<IconButton icon={<FaRedo />} onClick={resetGame} />
 				</HStack>
@@ -128,11 +173,50 @@ export const Game = () => {
 						{capitalizeFirstLetter(playerColors[currentPlayerRef.current])}
 					</Text>
 				</HStack>
-				<HStack as={Center}>
-					{/* Game status showing the count of pieces */}
-					<Text fontSize={"xl"}>White: {countPieces().whiteCount}</Text>
-					<Text fontSize="xl">Black: {countPieces().blackCount}</Text>
+
+				<HStack as={Center} gap="md">
+					<Stat
+						colorScheme="black"
+						label="Black Pieces"
+						number={blackCount.toString()}
+						centerContent
+						icon={
+							lastMove.length > 0 && blackCount > prevBlackCount
+								? "increase"
+								: lastMove.length > 0
+								? "decrease"
+								: undefined
+						}
+						helperMessage={
+							lastMove.length > 0 && `${blackDifference} from last move`
+						}
+						mb={lastMove.length > 0 ? "0" : "4"}
+					/>
+
+					<Stat
+						colorScheme="white"
+						label="White Pieces"
+						number={whiteCount.toString()}
+						centerContent
+						icon={
+							lastMove.length > 0 && whiteCount > prevWhiteCount
+								? "increase"
+								: lastMove.length > 0
+								? "decrease"
+								: undefined
+						}
+						helperMessage={
+							lastMove.length > 0 && `${whiteDifference} from last move`
+						}
+						mb={lastMove.length > 0 ? "0" : "4"}
+					/>
 				</HStack>
+
+				<Progress
+					value={whitePercentage}
+					filledTrackColor={"white"}
+					borderRadius={"sm"}
+				/>
 
 				<Board
 					currentPlayerRef={currentPlayerRef}
@@ -152,6 +236,15 @@ export const Game = () => {
 					lastMove={lastMove}
 					setLastMove={setLastMove}
 					resetGame={resetGame}
+					isOpen={isOpen}
+					onClose={onClose}
+					onOpen={onOpen}
+					setPrevBlackCount={setPrevBlackCount}
+					setPrevWhiteCount={setPrevWhiteCount}
+					setPrevBlackDifference={setPrevBlackDifference}
+					setPrevWhiteDifference={setPrevWhiteDifference}
+					prevBlackCount={prevBlackCount}
+					prevWhiteCount={prevWhiteCount}
 				/>
 			</VStack>
 		</Center>

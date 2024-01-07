@@ -8,7 +8,12 @@ import {
 	useState,
 	useRef,
 } from "react";
-import { BoardProps, boardSize, capitalizeFirstLetter, initializeBoard } from "./Game";
+import {
+	BoardProps,
+	boardSize,
+	capitalizeFirstLetter,
+	initializeBoard,
+} from "./Game";
 import {
 	Button,
 	IconButton,
@@ -18,6 +23,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
+	Progress,
 	Text,
 	useDisclosure,
 	useNotice,
@@ -38,10 +44,18 @@ export const Board: React.FC<BoardProps> = ({
 	setLastFlippedPieces,
 	lastMove,
 	setLastMove,
-	resetGame
+	resetGame,
+	isOpen,
+	onClose,
+	onOpen,
+	setPrevBlackCount,
+	setPrevWhiteCount,
+	setPrevBlackDifference,
+	setPrevWhiteDifference,
+	prevBlackCount,
+	prevWhiteCount,
 }) => {
 	const [validMoves, setValidMoves] = useState<number[][]>([]);
-	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [showPreviewAfterMove, setShowPreviewAfterMove] = useState(true);
 
 	// Directions to check for valid moves
@@ -188,6 +202,11 @@ export const Board: React.FC<BoardProps> = ({
 
 	const handleClick = (rowIndex: number, cellIndex: number) => {
 		if (isValidMove(board, rowIndex, cellIndex, currentPlayerRef.current)) {
+			const { blackCount, whiteCount } = countPieces();
+			setPrevBlackCount(blackCount);
+			setPrevBlackDifference(blackCount - prevBlackCount);
+			setPrevWhiteCount(whiteCount);
+			setPrevWhiteDifference(whiteCount - prevWhiteCount);
 			const newBoard = [...board];
 			newBoard[rowIndex][cellIndex] = currentPlayerRef.current;
 			const flippedPieces = flipPieces(
@@ -248,6 +267,11 @@ export const Board: React.FC<BoardProps> = ({
 
 		return { whiteCount, blackCount };
 	}, [board]);
+
+	// Calculate the percentage of white pieces
+	const totalPieces = countPieces().whiteCount + countPieces().blackCount;
+	const whitePercentage =
+		totalPieces > 0 ? (countPieces().whiteCount / totalPieces) * 100 : 0;
 
 	return (
 		<>
@@ -321,11 +345,21 @@ export const Board: React.FC<BoardProps> = ({
 						<Text fontSize={"2xl"} fontWeight={"bold"}>
 							{gameResult.current === 0
 								? "Draw!"
-								: gameResult.current !== null ? `${capitalizeFirstLetter(playerColors[gameResult.current])} wins!` : null}
+								: gameResult.current !== null
+								? `${capitalizeFirstLetter(
+										playerColors[gameResult.current]
+								  )} wins!`
+								: null}
 						</Text>
 						{/* Display the counts */}
 						<Text>White pieces: {countPieces().whiteCount}</Text>
 						<Text>Black pieces: {countPieces().blackCount}</Text>
+
+						<Progress
+							value={whitePercentage}
+							filledTrackColor={"white"}
+							borderRadius={"sm"}
+						/>
 					</ModalBody>
 					<ModalFooter>
 						<IconButton icon={<FaRedo />} onClick={resetGame} />

@@ -91,10 +91,10 @@ export const Settings: React.FC<BoardProps> = ({
 								</Checkbox>
 							</CheckboxGroup>
 						</FormControl>
-						<FormControl label="Change auto play time">
+						<FormControl label="Change auto play time (seconds)">
 							<Slider
 								min={1}
-								max={10}
+								max={20}
 								step={1}
 								value={value}
 								w={"88%"}
@@ -102,15 +102,20 @@ export const Settings: React.FC<BoardProps> = ({
 								onChange={handleSliderChange}
 								my="10">
 								<SliderMark value={1} w="10" ml="-5">
-									100ms
+									0.1
 								</SliderMark>
 								<SliderMark value={5} w="10" ml="-5">
-									500ms
+									0.5
 								</SliderMark>
 								<SliderMark value={10} w="10" ml="-5">
-									1000ms
+									1
 								</SliderMark>
-								{/* Add more SliderMarks as needed */}
+								<SliderMark value={15} w="10" ml="-5">
+									1.5
+								</SliderMark>
+								<SliderMark value={20} w="10" ml="-5">
+									2
+								</SliderMark>
 								<SliderMark
 									value={value}
 									bg="blue.500"
@@ -120,7 +125,7 @@ export const Settings: React.FC<BoardProps> = ({
 									w="10"
 									mt="-10"
 									ml="-5">
-									{value * 100}
+									{value / 10}
 								</SliderMark>
 							</Slider>
 						</FormControl>

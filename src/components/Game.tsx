@@ -23,6 +23,8 @@ export interface BoardProps {
 	board: number[][];
 	setBoard: Dispatch<SetStateAction<number[][]>>;
 	gameResult: { current: number | null };
+	autoPlayTimeout: number;
+	setAutoPlayTimeout: Dispatch<SetStateAction<number>>;
 }
 
 export const boardSize = 8; // Standard Reversi board size
@@ -54,6 +56,7 @@ export const Game = () => {
 	]);
 	const [board, setBoard] = useState(initializeBoard());
 	const gameResult = useRef<number | null>(null);
+	const [autoPlayTimeout, setAutoPlayTimeout] = useState<number>(500);
 
 	const capitalizeFirstLetter = (string: string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -98,6 +101,8 @@ export const Game = () => {
 						board={board}
 						setBoard={setBoard}
 						gameResult={gameResult}
+						autoPlayTimeout={autoPlayTimeout}
+						setAutoPlayTimeout={setAutoPlayTimeout}
 					/>
 					<IconButton icon={<FaRedo />} onClick={resetGame} />
 				</HStack>
@@ -108,16 +113,12 @@ export const Game = () => {
 					<Text fontSize="3xl">
 						{capitalizeFirstLetter(playerColors[currentPlayerRef.current])}
 					</Text>
-        </HStack>
-        <HStack as={Center}>
-          {/* Game status showing the count of pieces */}
-          <Text fontSize={"xl"}>
-            White: {countPieces().whiteCount}
-          </Text>
-          <Text fontSize="xl">
-            Black: {countPieces().blackCount}
-          </Text>
-        </HStack>
+				</HStack>
+				<HStack as={Center}>
+					{/* Game status showing the count of pieces */}
+					<Text fontSize={"xl"}>White: {countPieces().whiteCount}</Text>
+					<Text fontSize="xl">Black: {countPieces().blackCount}</Text>
+				</HStack>
 
 				<Board
 					currentPlayerRef={currentPlayerRef}
@@ -130,6 +131,8 @@ export const Game = () => {
 					board={board}
 					setBoard={setBoard}
 					gameResult={gameResult}
+					autoPlayTimeout={autoPlayTimeout}
+					setAutoPlayTimeout={setAutoPlayTimeout}
 				/>
 			</VStack>
 		</Center>

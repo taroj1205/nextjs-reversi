@@ -8,6 +8,7 @@ interface AutoPlayButtonProps {
 	gameResult: React.MutableRefObject<number | null>;
 	getValidMoves: (board: number[][], player: number) => number[][];
 	handleClick: (row: number, col: number) => void;
+	autoPlayTimeout: number;
 }
 
 const AutoPlayButton: React.FC<AutoPlayButtonProps> = ({
@@ -17,6 +18,7 @@ const AutoPlayButton: React.FC<AutoPlayButtonProps> = ({
 	gameResult,
 	getValidMoves,
 	handleClick,
+	autoPlayTimeout,
 }) => {
 	const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
@@ -35,13 +37,15 @@ const AutoPlayButton: React.FC<AutoPlayButtonProps> = ({
 
 	useEffect(() => {
 		if (isAutoPlaying) {
-			const timer = setInterval(autoPlay, 400); // Play a move every second
+			const timer = setInterval(autoPlay, autoPlayTimeout); // Play a move every second
 			return () => clearInterval(timer); // Clean up on unmount or when isAutoPlaying changes
 		}
-	}, [isAutoPlaying, autoPlay]);
+	}, [isAutoPlaying, autoPlay, autoPlayTimeout]);
 
 	return (
-		<Button className="mx-auto my-2" onClick={() => setIsAutoPlaying(!isAutoPlaying)}>
+		<Button
+			className="mx-auto my-2"
+			onClick={() => setIsAutoPlaying(!isAutoPlaying)}>
 			{isAutoPlaying ? "Stop Auto-Play" : "Start Auto-Play"}
 		</Button>
 	);

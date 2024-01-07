@@ -33,13 +33,14 @@ export const Board: React.FC<BoardProps> = ({
 	board,
 	setBoard,
 	gameResult,
+	autoPlayTimeout,
 }) => {
 	const [validMoves, setValidMoves] = useState<number[][]>([]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [lastMove, setLastMove] = useState<number[]>([]);
 	const [showPreviewAfterMove, setShowPreviewAfterMove] = useState(true);
 	const [lastFlippedPieces, setLastFlippedPieces] = useState<number[][]>([]);
-	
+
 	// Directions to check for valid moves
 	const directions = useMemo(
 		() => [
@@ -261,6 +262,7 @@ export const Board: React.FC<BoardProps> = ({
 				gameResult={gameResult}
 				getValidMoves={getValidMoves}
 				handleClick={handleClick}
+				autoPlayTimeout={autoPlayTimeout}
 			/>
 			<div className="grid grid-cols-8 gap-1 bg-green-700 aspect-square p-4">
 				{board.map((row, rowIndex) =>

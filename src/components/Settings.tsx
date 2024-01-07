@@ -17,6 +17,8 @@ import {
 	useColorMode,
 	useDisclosure,
 	VStack,
+	Slider,
+	SliderMark,
 } from "@yamada-ui/react";
 import { FaCog } from "react-icons/fa";
 
@@ -24,9 +26,11 @@ export const Settings: React.FC<BoardProps> = ({
 	showPreview,
 	setShowPreview,
 	playerColors,
-  setPlayerColors,
-  globalPreview,
-  setGlobalPreview,
+	setPlayerColors,
+	globalPreview,
+	setGlobalPreview,
+	autoPlayTimeout,
+	setAutoPlayTimeout,
 }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -45,9 +49,16 @@ export const Settings: React.FC<BoardProps> = ({
 		const newPlayerColors: [string, string, string] = [...playerColors];
 		newPlayerColors[index] = color;
 		setPlayerColors(newPlayerColors);
-  };
-  
-  const { internalColorMode, changeColorMode } = useColorMode();
+	};
+
+	const { internalColorMode, changeColorMode } = useColorMode();
+
+	const [value, setValue] = useState<number>(5); // 5 represents 500ms
+
+	const handleSliderChange = (value: number) => {
+		setValue(value);
+		setAutoPlayTimeout(value * 100); // Multiply by 100 to get the actual timeout in ms
+	};
 
 	return (
 		<>
@@ -79,6 +90,39 @@ export const Settings: React.FC<BoardProps> = ({
 									Toggle for player 2
 								</Checkbox>
 							</CheckboxGroup>
+						</FormControl>
+						<FormControl label="Change auto play time">
+							<Slider
+								min={1}
+								max={10}
+								step={1}
+								value={value}
+								w={"88%"}
+								ml={"6%"}
+								onChange={handleSliderChange}
+								my="10">
+								<SliderMark value={1} w="10" ml="-5">
+									100ms
+								</SliderMark>
+								<SliderMark value={5} w="10" ml="-5">
+									500ms
+								</SliderMark>
+								<SliderMark value={10} w="10" ml="-5">
+									1000ms
+								</SliderMark>
+								{/* Add more SliderMarks as needed */}
+								<SliderMark
+									value={value}
+									bg="blue.500"
+									color="white"
+									py="0.5"
+									rounded="md"
+									w="10"
+									mt="-10"
+									ml="-5">
+									{value * 100}
+								</SliderMark>
+							</Slider>
 						</FormControl>
 						<FormControl label="Change theme">
 							<RadioGroup

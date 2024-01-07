@@ -135,7 +135,7 @@ export const Game = () => {
 	return (
 		<Wrap as={Center} gap={10}>
 			<Box as={Center}>
-				<VStack>
+				<VStack w={"md"}>
 					<HStack as={Center}>
 						<Heading as={"h2"} fontSize={"5xl"}>
 							Reversi
@@ -216,12 +216,14 @@ export const Game = () => {
 							mb={lastMove.length > 0 ? "0" : "4"}
 						/>
 					</HStack>
-
-					<Progress
-						value={whitePercentage}
-						filledTrackColor={"white"}
-						borderRadius={"sm"}
-					/>
+					<Center>
+						<Progress
+							value={whitePercentage}
+							filledTrackColor={"white"}
+							borderRadius={"sm"}
+							maxW={"90%"}
+						/>
+					</Center>
 				</VStack>
 			</Box>
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { Box } from "@yamada-ui/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +20,9 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={inter.className}>
 				<Providers>
-					<main className="min-h-[100svh] flex flex-col items-center justify-center">
+					<Box className="min-h-[100svh] flex flex-col items-center justify-center">
 						{children}
-					</main>
+					</Box>
 				</Providers>
 			</body>
 		</html>

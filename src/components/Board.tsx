@@ -18,6 +18,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
+	Text,
 	useDisclosure,
 	useNotice,
 } from "@yamada-ui/react";
@@ -35,7 +36,9 @@ export const Board: React.FC<BoardProps> = ({
 }) => {
 	const [validMoves, setValidMoves] = useState<number[][]>([]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
+	const [lastMove, setLastMove] = useState<number[]>([]);
+	const [showPreviewAfterMove, setShowPreviewAfterMove] = useState(true);
+	
 	// Directions to check for valid moves
 	const directions = useMemo(
 		() => [
@@ -181,8 +184,11 @@ export const Board: React.FC<BoardProps> = ({
 			newBoard[rowIndex][cellIndex] = currentPlayerRef.current;
 			flipPieces(newBoard, rowIndex, cellIndex, currentPlayerRef.current);
 			setBoard(newBoard);
+			setLastMove([rowIndex, cellIndex]); // Update the last move
 
 			currentPlayerRef.current = currentPlayerRef.current === 1 ? 2 : 1; // Switch the current player
+
+			setShowPreviewAfterMove(true);
 		}
 	};
 
@@ -216,6 +222,7 @@ export const Board: React.FC<BoardProps> = ({
 		rowIndex: number,
 		cellIndex: number
 	) =>
+		showPreviewAfterMove &&
 		showPreview[player - 1] &&
 		currentPlayerRef.current === player &&
 		validMoves.some(([x, y]) => x === rowIndex && y === cellIndex);
@@ -250,7 +257,12 @@ export const Board: React.FC<BoardProps> = ({
 					row.map((cell, cellIndex) => (
 						<div
 							key={`${rowIndex}-${cellIndex}`}
-							className="w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 bg-green-500 flex justify-center items-center cursor-pointer relative transition-colors duration-300"
+							className={`w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 flex justify-center items-center cursor-pointer relative transition-colors duration-300 
+                ${
+									rowIndex === lastMove[0] && cellIndex === lastMove[1]
+										? "bg-red-500"
+										: "bg-green-500"
+								}`}
 							onClick={() => handleClick(rowIndex, cellIndex)}>
 							{cell !== 0 && (
 								<div
@@ -283,12 +295,12 @@ export const Board: React.FC<BoardProps> = ({
 					<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 					<ModalHeader>Game Over</ModalHeader>
 					<ModalBody>
-						{gameResult.current === 0
-							? "Draw"
-							: `Player ${gameResult.current} wins`}
+						<Text fontSize={"2xl"}>{gameResult.current === 0
+							? "Draw!"
+							: `Player ${gameResult.current} wins!`}</Text>
 						{/* Display the counts */}
-						<div>White pieces: {countPieces().whiteCount}</div>
-						<div>Black pieces: {countPieces().blackCount}</div>
+						<Text>White pieces: {countPieces().whiteCount}</Text>
+						<Text>Black pieces: {countPieces().blackCount}</Text>
 					</ModalBody>
 					<ModalFooter>
 						<IconButton icon={<FaRedo />} onClick={resetGame} />

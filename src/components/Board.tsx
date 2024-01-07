@@ -38,6 +38,7 @@ export const Board: React.FC<BoardProps> = ({
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [lastMove, setLastMove] = useState<number[]>([]);
 	const [showPreviewAfterMove, setShowPreviewAfterMove] = useState(true);
+	const [lastFlippedPieces, setLastFlippedPieces] = useState<number[][]>([]);
 	
 	// Directions to check for valid moves
 	const directions = useMemo(
@@ -146,6 +147,7 @@ export const Board: React.FC<BoardProps> = ({
 		col: number,
 		player: number
 	) => {
+		let flippedPieces: number[][] = [];
 		for (let [dx, dy] of directions) {
 			let x = row + dx;
 			let y = col + dy;
@@ -164,6 +166,7 @@ export const Board: React.FC<BoardProps> = ({
 						// Flip the opponent's pieces
 						while (x !== x2 || y !== y2) {
 							board[x][y] = player;
+							flippedPieces.push([x, y]); // Add the flipped piece to the array
 							x += dx;
 							y += dy;
 						}
@@ -174,6 +177,7 @@ export const Board: React.FC<BoardProps> = ({
 				}
 			}
 		}
+		return flippedPieces;
 	};
 
 	const notice = useNotice({ limit: 2 });
@@ -182,7 +186,13 @@ export const Board: React.FC<BoardProps> = ({
 		if (isValidMove(board, rowIndex, cellIndex, currentPlayerRef.current)) {
 			const newBoard = [...board];
 			newBoard[rowIndex][cellIndex] = currentPlayerRef.current;
-			flipPieces(newBoard, rowIndex, cellIndex, currentPlayerRef.current);
+			const flippedPieces = flipPieces(
+				newBoard,
+				rowIndex,
+				cellIndex,
+				currentPlayerRef.current
+			);
+			setLastFlippedPieces(flippedPieces);
 			setBoard(newBoard);
 			setLastMove([rowIndex, cellIndex]); // Update the last move
 
@@ -266,9 +276,20 @@ export const Board: React.FC<BoardProps> = ({
 							onClick={() => handleClick(rowIndex, cellIndex)}>
 							{cell !== 0 && (
 								<div
-									className={`rounded-full w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 ${
-										playerColors[cell] === "black" ? "bg-black" : "bg-white"
-									}`}></div>
+									key={`${rowIndex}-${cellIndex}-${currentPlayerRef.current}`}
+									className={`
+										rounded-full 
+										w-10 sm:w-12 md:w-16 lg:w-20 
+										h-10 sm:h-12 md:h-16 lg:h-20 
+										${playerColors[cell] === "black" ? "bg-black" : "bg-white"}
+										${
+											lastFlippedPieces.some(
+												([row, col]) => row === rowIndex && col === cellIndex
+											)
+												? "flip"
+												: ""
+										}
+									`}></div>
 							)}
 							{cell === 0 &&
 								(isPreviewVisible(1, rowIndex, cellIndex) ? (
@@ -295,9 +316,11 @@ export const Board: React.FC<BoardProps> = ({
 					<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 					<ModalHeader>Game Over</ModalHeader>
 					<ModalBody>
-						<Text fontSize={"2xl"}>{gameResult.current === 0
-							? "Draw!"
-							: `Player ${gameResult.current} wins!`}</Text>
+						<Text fontSize={"2xl"}>
+							{gameResult.current === 0
+								? "Draw!"
+								: `Player ${gameResult.current} wins!`}
+						</Text>
 						{/* Display the counts */}
 						<Text>White pieces: {countPieces().whiteCount}</Text>
 						<Text>Black pieces: {countPieces().blackCount}</Text>

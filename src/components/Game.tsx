@@ -1,12 +1,19 @@
 "use client";
 import { Board } from "@/components/Board";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { Settings } from "./Settings";
-import { HStack, IconButton, useLoading } from "@yamada-ui/react";
+import {
+	Center,
+	HStack,
+	Heading,
+	IconButton,
+	Text,
+	VStack,
+} from "@yamada-ui/react";
 import { FaRedo } from "react-icons/fa";
 
 export interface BoardProps {
-	currentPlayerRef: {current: number};
+	currentPlayerRef: { current: number };
 	showPreview: [boolean, boolean];
 	setShowPreview: Dispatch<SetStateAction<[boolean, boolean]>>;
 	playerColors: [string, string, string];
@@ -14,8 +21,8 @@ export interface BoardProps {
 	globalPreview: boolean;
 	setGlobalPreview: Dispatch<SetStateAction<boolean>>;
 	board: number[][];
-  setBoard: Dispatch<SetStateAction<number[][]>>;
-  gameResult: {current: number | null};
+	setBoard: Dispatch<SetStateAction<number[][]>>;
+	gameResult: { current: number | null };
 }
 
 export const boardSize = 8; // Standard Reversi board size
@@ -45,7 +52,7 @@ export const Game = () => {
 		true,
 		true,
 	]);
-  const [board, setBoard] = useState(initializeBoard());
+	const [board, setBoard] = useState(initializeBoard());
 	const gameResult = useRef<number | null>(null);
 
 	const capitalizeFirstLetter = (string: string) => {
@@ -53,16 +60,66 @@ export const Game = () => {
 	};
 
 	const resetGame = () => {
-    setBoard(initializeBoard());
-    gameResult.current = null;
+		setBoard(initializeBoard());
+		gameResult.current = null;
 		currentPlayerRef.current = 1;
 	};
 
+	// Function to count the pieces for each player
+	const countPieces = useCallback(() => {
+		let whiteCount = 0;
+		let blackCount = 0;
+
+		for (let i = 0; i < boardSize; i++) {
+			for (let j = 0; j < boardSize; j++) {
+				if (board[i][j] === 1) whiteCount++;
+				else if (board[i][j] === 2) blackCount++;
+			}
+		}
+
+		return { whiteCount, blackCount };
+	}, [board]);
+
 	return (
-		<div className="flex flex-col justify-center items-center">
-			<HStack>
-				<h2 className="text-4xl font-bold">Reversi</h2>
-				<Settings
+		<Center>
+			<VStack>
+				<HStack as={Center}>
+					<Heading as={"h2"} fontSize={"5xl"}>
+						Reversi
+					</Heading>
+					<Settings
+						currentPlayerRef={currentPlayerRef}
+						showPreview={showPreview}
+						setShowPreview={setShowPreview}
+						playerColors={playerColors}
+						setPlayerColors={setPlayerColors}
+						globalPreview={globalPreview}
+						setGlobalPreview={setGlobalPreview}
+						board={board}
+						setBoard={setBoard}
+						gameResult={gameResult}
+					/>
+					<IconButton icon={<FaRedo />} onClick={resetGame} />
+				</HStack>
+				<HStack as={Center}>
+					<Text as={Center} fontSize={"2xl"}>
+						Current player:
+					</Text>
+					<Text fontSize="3xl">
+						{capitalizeFirstLetter(playerColors[currentPlayerRef.current])}
+					</Text>
+        </HStack>
+        <HStack as={Center}>
+          {/* Game status showing the count of pieces */}
+          <Text fontSize={"xl"}>
+            White: {countPieces().whiteCount}
+          </Text>
+          <Text fontSize="xl">
+            Black: {countPieces().blackCount}
+          </Text>
+        </HStack>
+
+				<Board
 					currentPlayerRef={currentPlayerRef}
 					showPreview={showPreview}
 					setShowPreview={setShowPreview}
@@ -71,29 +128,10 @@ export const Game = () => {
 					globalPreview={globalPreview}
 					setGlobalPreview={setGlobalPreview}
 					board={board}
-          setBoard={setBoard}
-          gameResult={gameResult}
+					setBoard={setBoard}
+					gameResult={gameResult}
 				/>
-				<IconButton icon={<FaRedo />} onClick={resetGame} />
-			</HStack>
-			<p className="text-2xl">
-				Current player:{" "}
-				<span className="text-3xl">
-					{capitalizeFirstLetter(playerColors[currentPlayerRef.current])}
-				</span>
-			</p>
-			<Board
-				currentPlayerRef={currentPlayerRef}
-				showPreview={showPreview}
-				setShowPreview={setShowPreview}
-				playerColors={playerColors}
-				setPlayerColors={setPlayerColors}
-				globalPreview={globalPreview}
-				setGlobalPreview={setGlobalPreview}
-				board={board}
-        setBoard={setBoard}
-        gameResult={gameResult}
-			/>
-		</div>
+			</VStack>
+		</Center>
 	);
 };

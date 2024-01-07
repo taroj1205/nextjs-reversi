@@ -12,6 +12,9 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
+	Radio,
+	RadioGroup,
+	useColorMode,
 	useDisclosure,
 	VStack,
 } from "@yamada-ui/react";
@@ -42,7 +45,9 @@ export const Settings: React.FC<BoardProps> = ({
 		const newPlayerColors: [string, string, string] = [...playerColors];
 		newPlayerColors[index] = color;
 		setPlayerColors(newPlayerColors);
-	};
+  };
+  
+  const { internalColorMode, changeColorMode } = useColorMode();
 
 	return (
 		<>
@@ -74,6 +79,15 @@ export const Settings: React.FC<BoardProps> = ({
 									Toggle for player 2
 								</Checkbox>
 							</CheckboxGroup>
+						</FormControl>
+						<FormControl label="Change theme">
+							<RadioGroup
+								defaultValue={internalColorMode}
+								onChange={changeColorMode}>
+								<Radio value="light">Light</Radio>
+								<Radio value="dark">Dark</Radio>
+								<Radio value="system">System</Radio>
+							</RadioGroup>
 						</FormControl>
 					</VStack>
 				</ModalBody>

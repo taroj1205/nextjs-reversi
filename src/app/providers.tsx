@@ -1,5 +1,20 @@
-import { UIProvider } from "@yamada-ui/react"
+"use client";
+import {
+	ColorModeScript,
+	UIProvider,
+	createColorModeManager,
+} from "@yamada-ui/react";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <UIProvider>{children}</UIProvider>
-}
+	const colorModeManager = createColorModeManager("cookie");
+	return (
+		<UIProvider colorModeManager={colorModeManager}>
+			<ColorModeScript
+				type="cookie"
+        nonce="testing"
+				initialColorMode={"system"}
+			/>
+			{children}
+		</UIProvider>
+	);
+};

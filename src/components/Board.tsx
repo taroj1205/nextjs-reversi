@@ -8,7 +8,7 @@ import {
 	useState,
 	useRef,
 } from "react";
-import { BoardProps, boardSize, initializeBoard } from "./Game";
+import { BoardProps, boardSize, capitalizeFirstLetter, initializeBoard } from "./Game";
 import {
 	Button,
 	IconButton,
@@ -125,8 +125,8 @@ export const Board: React.FC<BoardProps> = ({
 
 		if (emptyCount === 0 || whiteCount === 0 || blackCount === 0) {
 			let result;
-			if (whiteCount > blackCount) result = 1; // White wins
-			else if (blackCount > whiteCount) result = 2; // Black wins
+			if (whiteCount > blackCount) result = 2; // White wins
+			else if (blackCount > whiteCount) result = 1; // Black wins
 			else result = 0; // Draw
 
 			gameResult.current = result;
@@ -318,10 +318,10 @@ export const Board: React.FC<BoardProps> = ({
 					<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 					<ModalHeader>Game Over</ModalHeader>
 					<ModalBody>
-						<Text fontSize={"2xl"}>
+						<Text fontSize={"2xl"} fontWeight={"bold"}>
 							{gameResult.current === 0
 								? "Draw!"
-								: `Player ${gameResult.current} wins!`}
+								: gameResult.current !== null ? `${capitalizeFirstLetter(playerColors[gameResult.current])} wins!` : null}
 						</Text>
 						{/* Display the counts */}
 						<Text>White pieces: {countPieces().whiteCount}</Text>

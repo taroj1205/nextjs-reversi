@@ -46,6 +46,10 @@ export const initializeBoard = () => {
 	return board;
 };
 
+export const capitalizeFirstLetter = (string: string) => {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 export const Game = () => {
 	const [playerColors, setPlayerColors] = useState<BoardProps["playerColors"]>([
 		"",
@@ -64,10 +68,6 @@ export const Game = () => {
 	const [autoPlayTimeout, setAutoPlayTimeout] = useState<number>(500);
 	const [lastFlippedPieces, setLastFlippedPieces] = useState<number[][]>([]);
 	const [lastMove, setLastMove] = useState<number[]>([]);
-
-	const capitalizeFirstLetter = (string: string) => {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	};
 
 	const resetGame = () => {
 		setBoard(initializeBoard());

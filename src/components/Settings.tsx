@@ -91,7 +91,7 @@ export const Settings: React.FC<BoardProps> = ({
 								</Checkbox>
 							</CheckboxGroup>
 						</FormControl>
-						<FormControl label="Change auto play time (seconds)">
+						{/* <FormControl label="Change auto play time (seconds)">
 							<Slider
 								min={1}
 								max={20}
@@ -128,7 +128,7 @@ export const Settings: React.FC<BoardProps> = ({
 									{value / 10}
 								</SliderMark>
 							</Slider>
-						</FormControl>
+						</FormControl> */}
 						<FormControl label="Change theme">
 							<RadioGroup
 								defaultValue={internalColorMode}

@@ -10,6 +10,7 @@ import {
 } from "react";
 import { Settings } from "./Settings";
 import {
+	Box,
 	Center,
 	HStack,
 	Heading,
@@ -18,6 +19,7 @@ import {
 	Stat,
 	Text,
 	VStack,
+	Wrap,
 	useDisclosure,
 } from "@yamada-ui/react";
 import { FaRedo } from "react-icons/fa";
@@ -128,125 +130,129 @@ export const Game = () => {
 	const blackDifference = blackCount - prevBlackCount;
 	const whiteDifference = whiteCount - prevWhiteCount;
 
+	const [autoPlayEnabled, setAutoPlayEnabled] = useState(false);
+
 	return (
-		<Center>
-			<VStack>
-				<HStack as={Center}>
-					<Heading as={"h2"} fontSize={"5xl"}>
-						Reversi
-					</Heading>
-					<Settings
-						currentPlayerRef={currentPlayerRef}
-						showPreview={showPreview}
-						setShowPreview={setShowPreview}
-						playerColors={playerColors}
-						setPlayerColors={setPlayerColors}
-						globalPreview={globalPreview}
-						setGlobalPreview={setGlobalPreview}
-						board={board}
-						setBoard={setBoard}
-						gameResult={gameResult}
-						autoPlayTimeout={autoPlayTimeout}
-						setAutoPlayTimeout={setAutoPlayTimeout}
-						lastFlippedPieces={lastFlippedPieces}
-						setLastFlippedPieces={setLastFlippedPieces}
-						lastMove={lastMove}
-						setLastMove={setLastMove}
-						resetGame={resetGame}
-						isOpen={isOpen}
-						onClose={onClose}
-						onOpen={onOpen}
-						setPrevBlackCount={setPrevBlackCount}
-						setPrevWhiteCount={setPrevWhiteCount}
-						setPrevBlackDifference={setPrevBlackDifference}
-						setPrevWhiteDifference={setPrevWhiteDifference}
-						prevBlackCount={prevBlackCount}
-						prevWhiteCount={prevWhiteCount}
+		<Wrap as={Center} gap={10}>
+			<Box as={Center}>
+				<VStack>
+					<HStack as={Center}>
+						<Heading as={"h2"} fontSize={"5xl"}>
+							Reversi
+						</Heading>
+						<Settings
+							currentPlayerRef={currentPlayerRef}
+							showPreview={showPreview}
+							setShowPreview={setShowPreview}
+							playerColors={playerColors}
+							setPlayerColors={setPlayerColors}
+							globalPreview={globalPreview}
+							setGlobalPreview={setGlobalPreview}
+							board={board}
+							setBoard={setBoard}
+							gameResult={gameResult}
+							autoPlayTimeout={autoPlayTimeout}
+							setAutoPlayTimeout={setAutoPlayTimeout}
+							lastFlippedPieces={lastFlippedPieces}
+							setLastFlippedPieces={setLastFlippedPieces}
+							lastMove={lastMove}
+							setLastMove={setLastMove}
+							resetGame={resetGame}
+							isOpen={isOpen}
+							onClose={onClose}
+							onOpen={onOpen}
+							setPrevBlackCount={setPrevBlackCount}
+							setPrevWhiteCount={setPrevWhiteCount}
+							setPrevBlackDifference={setPrevBlackDifference}
+							setPrevWhiteDifference={setPrevWhiteDifference}
+							prevBlackCount={prevBlackCount}
+							prevWhiteCount={prevWhiteCount}
+						/>
+						<IconButton icon={<FaRedo />} onClick={resetGame} />
+					</HStack>
+					<HStack as={Center}>
+						<Text as={Center} fontSize={"2xl"}>
+							Current player:
+						</Text>
+						<Text fontSize="3xl">
+							{capitalizeFirstLetter(playerColors[currentPlayerRef.current])}
+						</Text>
+					</HStack>
+
+					<HStack as={Center} gap="md">
+						<Stat
+							colorScheme="black"
+							label="Black Pieces"
+							number={blackCount.toString()}
+							centerContent
+							icon={
+								lastMove.length > 0 && blackCount > prevBlackCount
+									? "increase"
+									: lastMove.length > 0
+									? "decrease"
+									: undefined
+							}
+							helperMessage={
+								lastMove.length > 0 && `${blackDifference} from last move`
+							}
+							mb={lastMove.length > 0 ? "0" : "4"}
+						/>
+
+						<Stat
+							colorScheme="white"
+							label="White Pieces"
+							number={whiteCount.toString()}
+							centerContent
+							icon={
+								lastMove.length > 0 && whiteCount > prevWhiteCount
+									? "increase"
+									: lastMove.length > 0
+									? "decrease"
+									: undefined
+							}
+							helperMessage={
+								lastMove.length > 0 && `${whiteDifference} from last move`
+							}
+							mb={lastMove.length > 0 ? "0" : "4"}
+						/>
+					</HStack>
+
+					<Progress
+						value={whitePercentage}
+						filledTrackColor={"white"}
+						borderRadius={"sm"}
 					/>
-					<IconButton icon={<FaRedo />} onClick={resetGame} />
-				</HStack>
-				<HStack as={Center}>
-					<Text as={Center} fontSize={"2xl"}>
-						Current player:
-					</Text>
-					<Text fontSize="3xl">
-						{capitalizeFirstLetter(playerColors[currentPlayerRef.current])}
-					</Text>
-				</HStack>
+				</VStack>
+			</Box>
 
-				<HStack as={Center} gap="md">
-					<Stat
-						colorScheme="black"
-						label="Black Pieces"
-						number={blackCount.toString()}
-						centerContent
-						icon={
-							lastMove.length > 0 && blackCount > prevBlackCount
-								? "increase"
-								: lastMove.length > 0
-								? "decrease"
-								: undefined
-						}
-						helperMessage={
-							lastMove.length > 0 && `${blackDifference} from last move`
-						}
-						mb={lastMove.length > 0 ? "0" : "4"}
-					/>
-
-					<Stat
-						colorScheme="white"
-						label="White Pieces"
-						number={whiteCount.toString()}
-						centerContent
-						icon={
-							lastMove.length > 0 && whiteCount > prevWhiteCount
-								? "increase"
-								: lastMove.length > 0
-								? "decrease"
-								: undefined
-						}
-						helperMessage={
-							lastMove.length > 0 && `${whiteDifference} from last move`
-						}
-						mb={lastMove.length > 0 ? "0" : "4"}
-					/>
-				</HStack>
-
-				<Progress
-					value={whitePercentage}
-					filledTrackColor={"white"}
-					borderRadius={"sm"}
-				/>
-
-				<Board
-					currentPlayerRef={currentPlayerRef}
-					showPreview={showPreview}
-					setShowPreview={setShowPreview}
-					playerColors={playerColors}
-					setPlayerColors={setPlayerColors}
-					globalPreview={globalPreview}
-					setGlobalPreview={setGlobalPreview}
-					board={board}
-					setBoard={setBoard}
-					gameResult={gameResult}
-					autoPlayTimeout={autoPlayTimeout}
-					setAutoPlayTimeout={setAutoPlayTimeout}
-					lastFlippedPieces={lastFlippedPieces}
-					setLastFlippedPieces={setLastFlippedPieces}
-					lastMove={lastMove}
-					setLastMove={setLastMove}
-					resetGame={resetGame}
-					isOpen={isOpen}
-					onClose={onClose}
-					onOpen={onOpen}
-					setPrevBlackCount={setPrevBlackCount}
-					setPrevWhiteCount={setPrevWhiteCount}
-					setPrevBlackDifference={setPrevBlackDifference}
-					setPrevWhiteDifference={setPrevWhiteDifference}
-					prevBlackCount={prevBlackCount}
-					prevWhiteCount={prevWhiteCount}
-				/>
-			</VStack>
-		</Center>
+			<Board
+				currentPlayerRef={currentPlayerRef}
+				showPreview={showPreview}
+				setShowPreview={setShowPreview}
+				playerColors={playerColors}
+				setPlayerColors={setPlayerColors}
+				globalPreview={globalPreview}
+				setGlobalPreview={setGlobalPreview}
+				board={board}
+				setBoard={setBoard}
+				gameResult={gameResult}
+				autoPlayTimeout={autoPlayTimeout}
+				setAutoPlayTimeout={setAutoPlayTimeout}
+				lastFlippedPieces={lastFlippedPieces}
+				setLastFlippedPieces={setLastFlippedPieces}
+				lastMove={lastMove}
+				setLastMove={setLastMove}
+				resetGame={resetGame}
+				isOpen={isOpen}
+				onClose={onClose}
+				onOpen={onOpen}
+				setPrevBlackCount={setPrevBlackCount}
+				setPrevWhiteCount={setPrevWhiteCount}
+				setPrevBlackDifference={setPrevBlackDifference}
+				setPrevWhiteDifference={setPrevWhiteDifference}
+				prevBlackCount={prevBlackCount}
+				prevWhiteCount={prevWhiteCount}
+			/>
+		</Wrap>
 	);
 };

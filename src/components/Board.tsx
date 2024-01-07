@@ -15,6 +15,7 @@ import {
 	initializeBoard,
 } from "./Game";
 import {
+	AspectRatio,
 	Button,
 	IconButton,
 	Modal,
@@ -275,15 +276,6 @@ export const Board: React.FC<BoardProps> = ({
 
 	return (
 		<>
-			<AutoPlayButton
-				currentPlayerRef={currentPlayerRef}
-				board={board}
-				setBoard={setBoard}
-				gameResult={gameResult}
-				getValidMoves={getValidMoves}
-				handleClick={handleClick}
-				autoPlayTimeout={autoPlayTimeout}
-			/>
 			<div className="grid grid-cols-8 gap-1 bg-green-700 aspect-square p-4">
 				{board.map((row, rowIndex) =>
 					row.map((cell, cellIndex) => (
@@ -338,37 +330,37 @@ export const Board: React.FC<BoardProps> = ({
 						</div>
 					))
 				)}
-				<Modal isOpen={isOpen} onClose={onClose}>
-					<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
-					<ModalHeader>Game Over</ModalHeader>
-					<ModalBody>
-						<Text fontSize={"2xl"} fontWeight={"bold"}>
-							{gameResult.current === 0
-								? "Draw!"
-								: gameResult.current !== null
-								? `${capitalizeFirstLetter(
-										playerColors[gameResult.current]
-								  )} wins!`
-								: null}
-						</Text>
-						{/* Display the counts */}
-						<Text>White pieces: {countPieces().whiteCount}</Text>
-						<Text>Black pieces: {countPieces().blackCount}</Text>
-
-						<Progress
-							value={whitePercentage}
-							filledTrackColor={"white"}
-							borderRadius={"sm"}
-						/>
-					</ModalBody>
-					<ModalFooter>
-						<IconButton icon={<FaRedo />} onClick={resetGame} />
-						<Button variant="ghost" onClick={onClose}>
-							Close
-						</Button>
-					</ModalFooter>
-				</Modal>
 			</div>
+			<Modal isOpen={isOpen} onClose={onClose}>
+				<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+				<ModalHeader>Game Over</ModalHeader>
+				<ModalBody>
+					<Text fontSize={"2xl"} fontWeight={"bold"}>
+						{gameResult.current === 0
+							? "Draw!"
+							: gameResult.current !== null
+							? `${capitalizeFirstLetter(
+									playerColors[gameResult.current]
+							  )} wins!`
+							: null}
+					</Text>
+					{/* Display the counts */}
+					<Text>White pieces: {countPieces().whiteCount}</Text>
+					<Text>Black pieces: {countPieces().blackCount}</Text>
+
+					<Progress
+						value={whitePercentage}
+						filledTrackColor={"white"}
+						borderRadius={"sm"}
+					/>
+				</ModalBody>
+				<ModalFooter>
+					<IconButton icon={<FaRedo />} onClick={resetGame} />
+					<Button variant="ghost" onClick={onClose}>
+						Close
+					</Button>
+				</ModalFooter>
+			</Modal>
 		</>
 	);
 };

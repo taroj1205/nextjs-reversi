@@ -34,12 +34,15 @@ export const Board: React.FC<BoardProps> = ({
 	setBoard,
 	gameResult,
 	autoPlayTimeout,
+	lastFlippedPieces,
+	setLastFlippedPieces,
+	lastMove,
+	setLastMove,
+	resetGame
 }) => {
 	const [validMoves, setValidMoves] = useState<number[][]>([]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [lastMove, setLastMove] = useState<number[]>([]);
 	const [showPreviewAfterMove, setShowPreviewAfterMove] = useState(true);
-	const [lastFlippedPieces, setLastFlippedPieces] = useState<number[][]>([]);
 
 	// Directions to check for valid moves
 	const directions = useMemo(
@@ -203,13 +206,6 @@ export const Board: React.FC<BoardProps> = ({
 		}
 	};
 
-	const resetGame = () => {
-		onClose();
-		setBoard(initializeBoard());
-		gameResult.current = null;
-		currentPlayerRef.current = 1;
-	};
-
 	useEffect(() => {
 		if (!gameResult.current) {
 			getValidMoves(board, currentPlayerRef.current);
@@ -273,6 +269,10 @@ export const Board: React.FC<BoardProps> = ({
                 ${
 									rowIndex === lastMove[0] && cellIndex === lastMove[1]
 										? "bg-red-500"
+										: lastFlippedPieces.some(
+												([row, col]) => row === rowIndex && col === cellIndex
+										  )
+										? "bg-yellow-500"
 										: "bg-green-500"
 								}`}
 							onClick={() => handleClick(rowIndex, cellIndex)}>

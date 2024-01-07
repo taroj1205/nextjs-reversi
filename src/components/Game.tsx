@@ -25,6 +25,11 @@ export interface BoardProps {
 	gameResult: { current: number | null };
 	autoPlayTimeout: number;
 	setAutoPlayTimeout: Dispatch<SetStateAction<number>>;
+	lastFlippedPieces: number[][];
+	setLastFlippedPieces: Dispatch<SetStateAction<number[][]>>;
+	lastMove: number[];
+	setLastMove: Dispatch<SetStateAction<number[]>>;
+	resetGame: () => void;
 }
 
 export const boardSize = 8; // Standard Reversi board size
@@ -57,6 +62,8 @@ export const Game = () => {
 	const [board, setBoard] = useState(initializeBoard());
 	const gameResult = useRef<number | null>(null);
 	const [autoPlayTimeout, setAutoPlayTimeout] = useState<number>(500);
+	const [lastFlippedPieces, setLastFlippedPieces] = useState<number[][]>([]);
+	const [lastMove, setLastMove] = useState<number[]>([]);
 
 	const capitalizeFirstLetter = (string: string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -66,6 +73,8 @@ export const Game = () => {
 		setBoard(initializeBoard());
 		gameResult.current = null;
 		currentPlayerRef.current = 1;
+		setLastFlippedPieces([]);
+		setLastMove([]);
 	};
 
 	// Function to count the pieces for each player
@@ -103,6 +112,11 @@ export const Game = () => {
 						gameResult={gameResult}
 						autoPlayTimeout={autoPlayTimeout}
 						setAutoPlayTimeout={setAutoPlayTimeout}
+						lastFlippedPieces={lastFlippedPieces}
+						setLastFlippedPieces={setLastFlippedPieces}
+						lastMove={lastMove}
+						setLastMove={setLastMove}
+						resetGame={resetGame}
 					/>
 					<IconButton icon={<FaRedo />} onClick={resetGame} />
 				</HStack>
@@ -133,6 +147,11 @@ export const Game = () => {
 					gameResult={gameResult}
 					autoPlayTimeout={autoPlayTimeout}
 					setAutoPlayTimeout={setAutoPlayTimeout}
+					lastFlippedPieces={lastFlippedPieces}
+					setLastFlippedPieces={setLastFlippedPieces}
+					lastMove={lastMove}
+					setLastMove={setLastMove}
+					resetGame={resetGame}
 				/>
 			</VStack>
 		</Center>

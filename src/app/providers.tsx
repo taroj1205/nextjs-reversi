@@ -9,11 +9,6 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 	const colorModeManager = createColorModeManager("cookie");
 	return (
 		<UIProvider colorModeManager={colorModeManager}>
-			<ColorModeScript
-				type="cookie"
-        nonce="testing"
-				initialColorMode={"system"}
-			/>
 			{children}
 		</UIProvider>
 	);

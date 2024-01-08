@@ -15,3 +15,23 @@
   animation: flip 0.6s;
   transform-style: preserve-3d;
 }
+
+[data-mode="dark"] body, .progress:not([data-mode="dark"]) div {
+  background: var(--ui-colors-black);
+}
+
+[data-mode="dark"] .progress div {
+  background: var(--ui-colors-white);
+}
+
+.progress {
+  background: var(--ui-colors-border);
+}
+
+.progress:not([data-mode="dark"]) {
+  @apply flex justify-start;
+}
+
+[data-mode="dark"] .progress {
+  @apply flex justify-end;
+}

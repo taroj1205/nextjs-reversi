@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Box } from "@yamada-ui/react";
+import { Box, ColorModeScript } from "@yamada-ui/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +20,11 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={inter.className}>
 				<Providers>
+					<ColorModeScript
+						type="cookie"
+						nonce="testing"
+						initialColorMode={"system"}
+					/>
 					<Box className="min-h-[100svh] flex flex-col items-center justify-center">
 						{children}
 					</Box>

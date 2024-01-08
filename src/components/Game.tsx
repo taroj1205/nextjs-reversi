@@ -228,10 +228,9 @@ export const Game = () => {
 					<Center>
 						<Progress
 							value={progressType}
-							filledTrackColor={color}
+							// filledTrackColor={color}
 							maxW={"90%"}
-							justifyContent={progressAlign}
-							as={Flex}
+							className="progress"
 						/>
 					</Center>
 				</VStack>

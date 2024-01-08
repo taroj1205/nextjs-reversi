@@ -261,8 +261,8 @@ export const Board: React.FC<BoardProps> = ({
 
 		for (let i = 0; i < boardSize; i++) {
 			for (let j = 0; j < boardSize; j++) {
-				if (board[i][j] === 1) whiteCount++;
-				else if (board[i][j] === 2) blackCount++;
+				if (board[i][j] === 1) blackCount++;
+				else if (board[i][j] === 2) whiteCount++;
 			}
 		}
 

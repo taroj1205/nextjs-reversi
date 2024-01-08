@@ -12,6 +12,7 @@ import { Settings } from "./Settings";
 import {
 	Box,
 	Center,
+	Flex,
 	HStack,
 	Heading,
 	IconButton,
@@ -20,6 +21,8 @@ import {
 	Text,
 	VStack,
 	Wrap,
+	useColorMode,
+	useColorModeValue,
 	useDisclosure,
 } from "@yamada-ui/react";
 import { FaRedo } from "react-icons/fa";
@@ -107,8 +110,8 @@ export const Game = () => {
 
 		for (let i = 0; i < boardSize; i++) {
 			for (let j = 0; j < boardSize; j++) {
-				if (board[i][j] === 1) whiteCount++;
-				else if (board[i][j] === 2) blackCount++;
+				if (board[i][j] === 1) blackCount++;
+				else if (board[i][j] === 2) whiteCount++;
 			}
 		}
 
@@ -119,6 +122,8 @@ export const Game = () => {
 	const totalPieces = countPieces().whiteCount + countPieces().blackCount;
 	const whitePercentage =
 		totalPieces > 0 ? (countPieces().whiteCount / totalPieces) * 100 : 0;
+	const blackPercentage =
+		totalPieces > 0 ? (countPieces().blackCount / totalPieces) * 100 : 0;
 
 	const [prevBlackCount, setPrevBlackCount] = useState(0);
 	const [prevBlackDifference, setPrevBlackDifference] = useState(0);
@@ -131,6 +136,10 @@ export const Game = () => {
 	const whiteDifference = whiteCount - prevWhiteCount;
 
 	const [autoPlayEnabled, setAutoPlayEnabled] = useState(false);
+
+	const color = useColorModeValue("blackAlpha.800", "whiteAlpha.800");
+	const progressType = useColorModeValue(blackPercentage, whitePercentage);
+	const progressAlign = useColorModeValue("start", "flex-end");
 
 	return (
 		<Wrap as={Center} gap={10}>
@@ -218,10 +227,11 @@ export const Game = () => {
 					</HStack>
 					<Center>
 						<Progress
-							value={whitePercentage}
-							filledTrackColor={"white"}
-							borderRadius={"sm"}
+							value={progressType}
+							filledTrackColor={color}
 							maxW={"90%"}
+							justifyContent={progressAlign}
+							as={Flex}
 						/>
 					</Center>
 				</VStack>

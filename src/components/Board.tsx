@@ -281,7 +281,7 @@ export const Board: React.FC<BoardProps> = ({
 					row.map((cell, cellIndex) => (
 						<div
 							key={`${rowIndex}-${cellIndex}`}
-							className={`w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 flex justify-center items-center cursor-pointer relative transition-colors duration-300 
+							className={`group w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 flex justify-center items-center cursor-pointer relative transition-colors duration-300 
                 ${
 									rowIndex === lastMove[0] && cellIndex === lastMove[1]
 										? "bg-red-500"
@@ -311,9 +311,9 @@ export const Board: React.FC<BoardProps> = ({
 							)}
 							{cell === 0 &&
 								(isPreviewVisible(1, rowIndex, cellIndex) ? (
-									<div className="rounded-full w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 bg-opacity-30 bg-black"></div>
+									<div className="rounded-full w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 bg-opacity-30 lg:group-hover:bg-opacity-50 bg-black"></div>
 								) : isPreviewVisible(2, rowIndex, cellIndex) ? (
-									<div className="rounded-full w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 bg-opacity-50 bg-white"></div>
+									<div className="rounded-full w-10 sm:w-12 md:w-16 lg:w-20 h-10 sm:h-12 md:h-16 lg:h-20 bg-opacity-50 lg:group-hover:bg-opacity-60 bg-white"></div>
 								) : null)}
 							{rowIndex === 1 && cellIndex === 1 && (
 								<div className="absolute bottom-0 right-0 -mb-1.5 -mr-1.5 bg-black rounded-full w-2 h-2 z-10"></div>

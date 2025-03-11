@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Reversi Game
+
+A modern implementation of the classic Reversi (Othello) board game built with Next.js and Yamada UI.
+
+![Reversi Game Screenshot](https://nextjs-reversi.vercel.app/screenshot.png)
+
+## Live Demo
+
+Try the game at: [https://nextjs-reversi.vercel.app/](https://nextjs-reversi.vercel.app/)
+
+## Features
+
+- 🎮 Classic Reversi gameplay
+- 🎨 Dark/Light theme support
+- 👀 Move preview system
+- 🔄 Auto-play functionality
+- 📱 Responsive design
+- ✨ Piece flip animations
+- 📊 Real-time score tracking
+
+## Tech Stack
+
+- [Next.js 14](https://nextjs.org/) - React framework
+- [Yamada UI](https://yamada-ui.com/) - Component library
+- [TailwindCSS](https://tailwindcss.com/) - CSS framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [React Icons](https://react-icons.github.io/react-icons/) - Icon library
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/nextjs-reversi.git
+cd nextjs-reversi
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to play the game.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Game Rules
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Black plays first
+2. Players take turns placing pieces on the board
+3. To place a piece, you must flip at least one opponent's piece
+4. A piece can be flipped when it's surrounded by opponent's pieces
+5. Game ends when no valid moves remain
+6. Player with the most pieces wins
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Feel free to open issues or submit pull requests.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [@taroj1205](https://github.com/taroj1205)
 
-## Deploy on Vercel
+## Acknowledgments
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Yamada UI team for the fantastic component library
+- Next.js team for the amazing framework
+- The open source community
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deployment
+
+The game is deployed on [Vercel](https://vercel.com) with continuous deployment from the main branch.

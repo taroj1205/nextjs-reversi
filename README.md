@@ -13,7 +13,6 @@ Try the game at: [https://nextjs-reversi.vercel.app/](https://nextjs-reversi.ver
 - 🎮 Classic Reversi gameplay
 - 🎨 Dark/Light theme support
 - 👀 Move preview system
-- 🔄 Auto-play functionality
 - 📱 Responsive design
 - ✨ Piece flip animations
 - 📊 Real-time score tracking
@@ -31,7 +30,7 @@ Try the game at: [https://nextjs-reversi.vercel.app/](https://nextjs-reversi.ver
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/nextjs-reversi.git
+git clone https://github.com/taroj1205/nextjs-reversi.git
 cd nextjs-reversi
 ```
 
